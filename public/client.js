@@ -28,7 +28,14 @@ function calculate(operand1, operand2, operation) {
             uri += "?operation=subtract";
             break;
         case '*':
-            uri += "?operation=multiply";   
+            uri += "?operation=multiply";
+            break;  
+        case '/':
+            uri += "?operation=divide";
+            break;  
+        case '^':
+            uri += "?operation=power";
+            break;   
         default:
             setError();
             return;

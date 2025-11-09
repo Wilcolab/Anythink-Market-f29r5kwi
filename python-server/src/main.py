@@ -1,22 +1,33 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+const express = require('express');
+const app = express();
+app.use(express.json());
 
-app = FastAPI()
+const tasks = [
+    "Write a diary entry from the future",
+    "Create a time machine from a cardboard box",
+    "Plan a trip to the dinosaurs",
+    "Draw a futuristic city",
+    "List items to bring on a time-travel adventure"
+];
 
-class Task(BaseModel):
-    text: str
+app.get('/', (req, res) => {
+    res.send('Hello World');
+});
 
-tasks = ["Write a diary entry from the future", "Create a time machine from a cardboard box", "Plan a trip to the dinosaurs", "Draw a futuristic city", "List items to bring on a time-travel adventure"]
+app.post('/tasks', (req, res) => {
+    const { text } = req.body;
+    if (!text || typeof text !== 'string') {
+        return res.status(400).json({ error: 'text is required' });
+    }
+    tasks.push(text);
+    res.json({ message: 'Task added successfully' });
+});
 
-@app.get("/")
-def get_tasks():
-    return "Hello World"
+app.get('/tasks', (req, res) => {
+    res.json({ tasks });
+});
 
-@app.post("/tasks")
-def add_task(task: Task):
-    tasks.append(task.text)
-    return {"message": "Task added successfully"}
-
-@app.get("/tasks")
-def get_tasks():
-    return {"tasks": tasks}
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+});

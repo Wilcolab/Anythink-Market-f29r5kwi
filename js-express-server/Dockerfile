@@ -1,19 +1,14 @@
-FROM node:14
+FROM node:18-alpine
 
-# Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and yarn.lock
-COPY package.json yarn.lock ./
+# install dependencies
+COPY package.json package-lock.json yarn.lock* ./
+RUN yarn install --frozen-lockfile --network-timeout 100000 || yarn install
 
-# Install dependencies
-RUN yarn install
-
-# Copy the rest of the application code
+# copy app source
 COPY . .
 
-# Expose the port the app runs on
 EXPOSE 8001
 
-# Command to run the application
 CMD ["yarn", "start"]

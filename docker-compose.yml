@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   python-server:
     build:
@@ -6,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./python-server/src:/app/src
+      - ./python-server:/app
     environment:
       - PYTHONUNBUFFERED=1
 
@@ -17,7 +18,8 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - ./js-express-server/src:/usr/src/app/src
+      - ./js-express-server:/usr/src/app
+      - /usr/src/app/node_modules
     environment:
       - NODE_ENV=development
     depends_on:

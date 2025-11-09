@@ -4,6 +4,21 @@ services:
       context: ./python-server
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - "8000:8000"
     volumes:
       - ./python-server/src:/app/src
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  js-express-server:
+    build:
+      context: ./js-express-server
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./js-express-server/src:/usr/src/app/src
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - python-server

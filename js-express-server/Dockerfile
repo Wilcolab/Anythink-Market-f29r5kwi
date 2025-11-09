@@ -2,11 +2,16 @@ FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
-# install dependencies
-COPY package.json package-lock.json yarn.lock* ./
-RUN yarn install --frozen-lockfile --network-timeout 100000 || yarn install
+# copy manifests first for cached installs
+COPY package.json yarn.lock* package-lock.json* ./
 
-# copy app source
+# install with yarn if available, fallback to npm
+RUN if [ -f yarn.lock ]; then \
+      yarn install --frozen-lockfile --network-timeout 100000; \
+    else \
+      npm install; \
+    fi
+
 COPY . .
 
 EXPOSE 8001

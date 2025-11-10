@@ -1,9 +1,16 @@
+version: '3.8'
+
 services:
-  python-server:
+  python_app:
     build:
-      context: ./python-server
+      context: ./python-app
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
-    volumes:
-      - ./python-server/src:/app/src
+      - "8000:8000"
+
+  node_app:
+    build:
+      context: ./node-app
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"

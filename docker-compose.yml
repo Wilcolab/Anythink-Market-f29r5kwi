@@ -1,30 +1,9 @@
-version: '3.8'
 services:
   python-server:
     build:
       context: ./python-server
       dockerfile: Dockerfile
-    # explicitly run the FastAPI app with reload for dev
-    command: uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
     ports:
-      - "8000:8000"
+      - 8000:8000
     volumes:
-      - ./python-server:/app
-    environment:
-      - PYTHONUNBUFFERED=1
-
-  js-express-server:
-    build:
-      context: ./js-express-server
-      dockerfile: Dockerfile
-    # explicitly run the Node app via yarn (nodemon configured in package.json)
-    command: yarn start
-    ports:
-      - "8001:8001"
-    volumes:
-      - ./js-express-server:/usr/src/app:delegated
-      - /usr/src/app/node_modules
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      - python-server
+      - ./python-server/src:/app/src

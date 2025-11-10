@@ -1,9 +1,0 @@
-{
-  "name": "Anythink Dev Container",
-  "image": "mcr.microsoft.com/devcontainers/base:alpine",
-  "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
-  ],
-  "postCreateCommand": "apk add --no-cache docker py3-pip build-base python3-dev libffi-dev openssl-dev libyaml-dev || true && python3 -m venv /workspaces/.venv && . /workspaces/.venv/bin/activate && pip install --upgrade pip && pip install docker-compose || true",
-  "remoteUser": "vscode"
-}

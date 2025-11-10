@@ -1,29 +1,16 @@
 version: '3.8'
 
 services:
-  python-server:
+  python_app:
     build:
-      context: ./python-server
+      context: ./python-app
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-    volumes:
-      - ./python-server/src:/app/src:ro
-      - ./python-server/requirements.txt:/app/requirements.txt:ro
-    command: ["uvicorn", "src.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
-    restart: unless-stopped
 
-  js-express-server:
+  node_app:
     build:
-      context: ./js-express-server
+      context: ./node-app
       dockerfile: Dockerfile
     ports:
       - "8001:8001"
-    volumes:
-      - ./js-express-server:/usr/src/app
-      - /usr/src/app/node_modules
-    environment:
-      - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
-    command: ["yarn", "start"]
-    restart: unless-stopped

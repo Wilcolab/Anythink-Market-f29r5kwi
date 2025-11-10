@@ -1,9 +1,41 @@
+version: '3.8'
+
 services:
   python-server:
     build:
       context: ./python-server
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - "8000:8000"
     volumes:
-      - ./python-server/src:/app/src
+      - ./python-server/src:/app/src:ro
+      - ./python-server/requirements.txt:/app/requirements.txt:ro
+    # Run the FastAPI app with uvicorn (reload for dev)
+    command: ["uvicorn", "src.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+    restart: unless-stopped
+
+  js-express-server:
+    build:
+      context: ./js-express-server
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./js-express-server:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    # Use yarn start (nodemon) to run the Express app and pick up code changes
+    command: ["yarn", "start"]
+    restart: unless-stopped
+
+{
+  "name": "Anythink Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/base:alpine",
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+  "postCreateCommand": "apk add --no-cache docker py3-pip build-base python3-dev libffi-dev openssl-dev libyaml-dev || true && python3 -m venv /workspaces/.venv && . /workspaces/.venv/bin/activate && pip install --upgrade pip && pip install docker-compose || true",
+  "remoteUser": "vscode"
+}
